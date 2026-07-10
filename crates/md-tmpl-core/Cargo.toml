@@ -17,7 +17,6 @@ typed-builder = ["dep:typed-builder"]
 
 [dependencies]
 thiserror = { version = "2", default-features = false }
-const-str = "1.1"
 hashbrown = { version = "0.17", default-features = false, features = [
   "allocator-api2",
   "default-hasher",
