@@ -18,6 +18,8 @@ typed-builder = ["md-tmpl-core/typed-builder"]
 # Re-export proc macros so users can write `md_tmpl::include_template!`
 # instead of importing `md_tmpl_macros` separately.
 macros = ["dep:md-tmpl-macros"]
+# no_std builds take LazyLock from spin instead of std.
+spin = ["md-tmpl-core/spin"]
 
 [dependencies]
 md-tmpl-core = { version = "0.6.0", path = "../md-tmpl-core", default-features = false }

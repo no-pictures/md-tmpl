@@ -21,8 +21,11 @@ pub(crate) use hashbrown::hash_map;
 pub(crate) use hashbrown::{HashMap, HashSet};
 /// Lazy initializer — [`std::sync::LazyLock`] under `std`,
 /// [`spin::LazyLock`] under `no_std`.
-#[cfg(not(feature = "std"))]
+#[cfg(all(not(feature = "std"), feature = "spin"))]
 pub use spin::LazyLock;
+
+#[cfg(all(not(feature = "std"), not(feature = "spin")))]
+compile_error!("no_std builds need the `spin` feature for LazyLock");
 
 #[cfg(test)]
 mod tests {
