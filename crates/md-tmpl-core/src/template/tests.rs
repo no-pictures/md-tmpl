@@ -649,6 +649,55 @@ params: [name = str]
     );
 }
 
+#[test]
+fn include_with_arg_string_literal_containing_dots_compiles() {
+    // A quoted with-argument like a filename must not be split at its dots
+    // and have the leading fragment reported as an undeclared variable.
+    let source = r#"---
+params: []
+---
+> {% include [origin](./_origin.tmpl.md) with source = "web/about.tmpl.md", alt = "v1.2.3" %}"#;
+    Template::compile(source, CompileOptions::default()).unwrap();
+}
+
+#[test]
+fn include_with_arg_dotted_variable_path_still_rejected() {
+    let source = r"---
+params: []
+---
+> {% include [x](./_x.tmpl.md) with source = web.about %}";
+    let err = Template::compile(source, CompileOptions::default()).unwrap_err();
+    assert!(
+        err.to_string().contains("web"),
+        "an undeclared dotted path must still be rejected: {err}"
+    );
+}
+
+#[test]
+fn include_with_interpolated_arg_counts_param_as_used() {
+    // A `{{ expr }}` inside a quoted with-value references the parameter;
+    // it used to be invisible to the analyzer, so a param used only here
+    // was misreported as unused.
+    let source = r#"---
+params: [test = str]
+---
+> {% include [origin](./_origin.tmpl.md) with source = "{{test}}/about.tmpl.md" %}"#;
+    Template::compile(source, CompileOptions::default()).unwrap();
+}
+
+#[test]
+fn include_with_interpolated_arg_rejects_undeclared_variable() {
+    let source = r#"---
+params: []
+---
+> {% include [origin](./_origin.tmpl.md) with source = "{{missing}}/about" %}"#;
+    let err = Template::compile(source, CompileOptions::default()).unwrap_err();
+    assert!(
+        err.to_string().contains("missing"),
+        "an undeclared variable inside an interpolated with-value must be rejected: {err}"
+    );
+}
+
 // -- validate_declarations: type change detection --------------------------
 
 #[test]

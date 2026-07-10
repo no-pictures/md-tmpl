@@ -2920,8 +2920,16 @@ function collectRefsInner(
       case NODE_INCLUDE:
         // Include with-mappings reference variables
         for (const [, valExpr] of node.withMappings) {
-          const root = extractRootVariable(valExpr, loopBindings);
-          if (root) refs.add(root);
+          if (
+            (valExpr.startsWith('"') && valExpr.endsWith('"')) ||
+            (valExpr.startsWith("'") && valExpr.endsWith("'"))
+          ) {
+            // Quoted with-value: extract {{ expr }} interpolation refs
+            extractInterpolationRefs(valExpr.slice(1, -1), refs, loopBindings);
+          } else {
+            const root = extractRootVariable(valExpr, loopBindings);
+            if (root) refs.add(root);
+          }
         }
         // Include for-binding iteration expression
         if (node.forExpr) {
