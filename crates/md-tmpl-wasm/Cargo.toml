@@ -15,6 +15,7 @@ crate-type = ["cdylib", "rlib"]
 md-tmpl = { version = "0.6.0", path = "../md-tmpl", features = [
   "std",
   "serde",
+  "flexbuffers",
 ] }
 serde_json = "1"
 wasm-bindgen = "0.2"
