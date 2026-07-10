@@ -2136,3 +2136,21 @@ CHILD_GREETING
 > {% /tmpl %}
 
 > {% include greeting %}'''
+
+[[tests]]
+name = "include_with_string_literal_containing_dots"
+description = "A quoted with-argument containing dots (e.g. a filename) is a literal, not a variable path"
+parent_template = '''
+---
+params: []
+---
+> {% include [origin](./origin.tmpl.md) with source = "web/about.tmpl.md" %}'''
+expected_output = "From web/about.tmpl.md"
+params = {}
+
+[tests.files]
+"origin.tmpl.md" = '''
+---
+params: [source = str]
+---
+From {{ source }}'''

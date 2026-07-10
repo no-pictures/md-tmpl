@@ -141,6 +141,7 @@ fn collect_refs_inner(
 /// - `"idx(item)"` → extracts `item` as the arg, then checks loop bindings
 /// - `"'literal'"` → `None`
 /// - `"42"` → `None`
+/// - `"\"web/about.tmpl.md\""` → `None` (string literal, dots included)
 fn extract_root_variable(expr: &str, loop_bindings: &HashSet<String>) -> Option<String> {
     let expr = expr.trim();
     if expr.is_empty() {
@@ -162,6 +163,12 @@ fn extract_root_variable(expr: &str, loop_bindings: &HashSet<String>) -> Option<
                 arg = s.trim();
             } else if let Some(s) = arg.strip_prefix(crate::consts::PREFIX_PARAMS_DOT) {
                 arg = s.trim();
+            }
+            // A literal argument names no variable; check the whole token
+            // before the path split, or a quoted string containing `.` is
+            // chopped at the dot and its fragment reported as undeclared.
+            if is_literal(arg) {
+                return None;
             }
             let root = arg
                 .split(crate::consts::PATH_SEP)
@@ -192,6 +199,12 @@ fn extract_root_variable(expr: &str, loop_bindings: &HashSet<String>) -> Option<
     } else {
         base
     };
+
+    // The same whole-token check for the pipe-stripped base: `"a.b" | upper`
+    // filters a literal and references no variable.
+    if is_literal(base) {
+        return None;
+    }
 
     let root = base
         .split(crate::consts::PATH_SEP)

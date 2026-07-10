@@ -649,6 +649,36 @@ params: [name = str]
     );
 }
 
+#[test]
+fn include_with_arg_string_literal_containing_dots_compiles() {
+    // A quoted with-argument like a filename must not be split at its dots
+    // and have the leading fragment reported as an undeclared variable.
+    Template::compile(
+        "---
+params: []
+---
+> {% include [origin](./_origin.tmpl.md) with source = \"web/about.tmpl.md\", alt = 'a.b' %}",
+        CompileOptions::default(),
+    )
+    .unwrap();
+}
+
+#[test]
+fn include_with_arg_dotted_variable_path_still_rejected() {
+    let err = Template::compile(
+        "---
+params: []
+---
+> {% include [x](./_x.tmpl.md) with source = web.about %}",
+        CompileOptions::default(),
+    )
+    .unwrap_err();
+    assert!(
+        err.to_string().contains("web"),
+        "an undeclared dotted path must still be rejected: {err}"
+    );
+}
+
 // -- validate_declarations: type change detection --------------------------
 
 #[test]
