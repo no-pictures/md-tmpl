@@ -287,6 +287,35 @@ no closing delimiter";
 }
 
 #[test]
+fn empty_frontmatter_block_declares_nothing() {
+    let (fm, body) = parse_frontmatter("---\n---\nbody").unwrap();
+    assert!(fm.declarations.is_empty());
+    assert!(!fm.has_params);
+    assert_eq!(body, "body");
+}
+
+#[test]
+fn empty_frontmatter_block_with_blank_lines() {
+    let (fm, body) = parse_frontmatter("---\n\n\n---\nbody").unwrap();
+    assert!(fm.declarations.is_empty());
+    assert_eq!(body, "body");
+}
+
+#[test]
+fn empty_frontmatter_block_crlf() {
+    let (fm, body) = parse_frontmatter("---\r\n---\r\nbody").unwrap();
+    assert!(fm.declarations.is_empty());
+    assert_eq!(body, "body");
+}
+
+#[test]
+fn empty_frontmatter_block_at_eof() {
+    let (fm, body) = parse_frontmatter("---\n---").unwrap();
+    assert!(fm.declarations.is_empty());
+    assert_eq!(body, "");
+}
+
+#[test]
 fn join_continuation_lines_basic() {
     let block = "key1: val1\nkey2:\n  continued\n  more";
     let lines = join_continuation_lines(block);
