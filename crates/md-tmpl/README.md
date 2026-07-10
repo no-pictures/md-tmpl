@@ -81,7 +81,7 @@ cargo add md-tmpl
 # (md-tmpl re-exports include_template! and template! macros)
 ```
 
-**MSRV:** 1.85 (Rust 2024 edition) · **`no_std`** compatible (disable default `std` feature)
+**MSRV:** 1.85 (Rust 2024 edition) · **`no_std`** compatible (disable the default `std` feature and enable `spin`)
 
 ## Template Syntax & Features
 

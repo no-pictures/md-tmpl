@@ -102,13 +102,13 @@ test-rust:
 # Verify no_std compatibility (integration tests + true no_std target build)
 test-no-std:
     @echo "── no_std integration tests ──"
-    cargo test -p md-tmpl --no-default-features --test no_std_compat
+    cargo test -p md-tmpl --no-default-features --features spin --test no_std_compat
     @echo ""
     @echo "── no_std target build (thumbv7em-none-eabihf) ──"
-    cargo build -p md-tmpl --no-default-features --target thumbv7em-none-eabihf
-    cargo build -p md-tmpl --no-default-features --features serde --target thumbv7em-none-eabihf
-    cargo build -p md-tmpl --no-default-features --features typed-builder --target thumbv7em-none-eabihf
-    cargo build -p md-tmpl --no-default-features --features serde,typed-builder --target thumbv7em-none-eabihf
+    cargo build -p md-tmpl --no-default-features --features spin --target thumbv7em-none-eabihf
+    cargo build -p md-tmpl --no-default-features --features serde,spin --target thumbv7em-none-eabihf
+    cargo build -p md-tmpl --no-default-features --features typed-builder,spin --target thumbv7em-none-eabihf
+    cargo build -p md-tmpl --no-default-features --features serde,typed-builder,spin --target thumbv7em-none-eabihf
     @echo "All no_std checks pass ✓"
 
 # Build and test Python bindings
