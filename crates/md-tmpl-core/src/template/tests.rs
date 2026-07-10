@@ -651,9 +651,13 @@ params: [name = str]
 
 #[test]
 fn empty_frontmatter_block_compiles_and_renders() {
-    // `---\n---` declares an empty interface, equivalent to `params: []`;
-    // it used to be misreported as an unclosed frontmatter block.
-    let (tmpl, fm) = Template::compile("---\n---\n# Plain\n", CompileOptions::default()).unwrap();
+    // An empty frontmatter block declares an empty interface, equivalent to
+    // `params: []`; it used to be misreported as an unclosed frontmatter block.
+    let source = r"---
+---
+# Plain
+";
+    let (tmpl, fm) = Template::compile(source, CompileOptions::default()).unwrap();
     assert!(fm.declarations.is_empty());
     assert_eq!(tmpl.render_empty().unwrap().trim(), "# Plain");
 }

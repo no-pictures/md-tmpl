@@ -288,7 +288,10 @@ no closing delimiter";
 
 #[test]
 fn empty_frontmatter_block_declares_nothing() {
-    let (fm, body) = parse_frontmatter("---\n---\nbody").unwrap();
+    let source = r"---
+---
+body";
+    let (fm, body) = parse_frontmatter(source).unwrap();
     assert!(fm.declarations.is_empty());
     assert!(!fm.has_params);
     assert_eq!(body, "body");
@@ -296,21 +299,32 @@ fn empty_frontmatter_block_declares_nothing() {
 
 #[test]
 fn empty_frontmatter_block_with_blank_lines() {
-    let (fm, body) = parse_frontmatter("---\n\n\n---\nbody").unwrap();
+    let source = r"---
+
+
+---
+body";
+    let (fm, body) = parse_frontmatter(source).unwrap();
     assert!(fm.declarations.is_empty());
     assert_eq!(body, "body");
 }
 
 #[test]
 fn empty_frontmatter_block_crlf() {
-    let (fm, body) = parse_frontmatter("---\r\n---\r\nbody").unwrap();
+    let source = r"---
+---
+body"
+        .replace('\n', "\r\n");
+    let (fm, body) = parse_frontmatter(&source).unwrap();
     assert!(fm.declarations.is_empty());
     assert_eq!(body, "body");
 }
 
 #[test]
 fn empty_frontmatter_block_at_eof() {
-    let (fm, body) = parse_frontmatter("---\n---").unwrap();
+    let source = r"---
+---";
+    let (fm, body) = parse_frontmatter(source).unwrap();
     assert!(fm.declarations.is_empty());
     assert_eq!(body, "");
 }
