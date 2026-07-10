@@ -1,0 +1,20 @@
+[package]
+name = "md-tmpl-compile-tests"
+version = "0.6.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Compile-time template! tests generated from the shared TOML fixtures"
+license = "Apache-2.0 OR MIT"
+publish = false
+
+[dev-dependencies]
+md-tmpl = { path = "../md-tmpl", features = ["macros"] }
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+typed-builder = { workspace = true }
+
+[build-dependencies]
+toml = "0.8"
+
+[lints]
+workspace = true
