@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "crates/md-tmpl",
+  "crates/md-tmpl-compile-tests",
   "crates/md-tmpl-core",
   "crates/md-tmpl-macros",
   "crates/md-tmpl-python",
