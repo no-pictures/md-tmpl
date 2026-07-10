@@ -174,10 +174,9 @@ impl Context {
     }
 }
 
-/// `FlexBuffers` support — requires `std` (the `flexbuffers` crate does not
-/// support `no_std`).
-#[cfg(feature = "std")]
-#[cfg(feature = "serde")]
+/// `FlexBuffers` support — behind the `flexbuffers` feature, which implies
+/// `std` and `serde` (the `flexbuffers` crate does not support `no_std`).
+#[cfg(feature = "flexbuffers")]
 impl Context {
     /// Build a `Context` from a `FlexBuffers` binary buffer.
     ///

@@ -10,9 +10,10 @@ keywords = ["template", "prompt", "markdown", "llm", "agent"]
 categories = ["template-engine", "text-processing"]
 
 [features]
-default = ["std", "serde", "typed-builder"]
-std = ["hashbrown/default", "thiserror/std", "ciborium/std", "dep:flexbuffers"]
+default = ["std", "serde", "typed-builder", "flexbuffers"]
+std = ["hashbrown/default", "thiserror/std", "ciborium?/std"]
 serde = ["dep:serde", "dep:ciborium", "hashbrown/serde"]
+flexbuffers = ["std", "serde", "dep:flexbuffers"]
 typed-builder = ["dep:typed-builder"]
 
 [dependencies]

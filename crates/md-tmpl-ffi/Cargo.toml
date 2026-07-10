@@ -14,6 +14,7 @@ crate-type = ["staticlib"]
 md-tmpl = { version = "0.6.0", path = "../md-tmpl", features = [
   "std",
   "serde",
+  "flexbuffers",
 ] }
 
 [lints]

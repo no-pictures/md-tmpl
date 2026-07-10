@@ -11,9 +11,10 @@ keywords = ["template", "prompt", "markdown", "llm", "agent"]
 categories = ["template-engine", "text-processing"]
 
 [features]
-default = ["std", "serde", "typed-builder", "macros"]
+default = ["std", "serde", "typed-builder", "macros", "flexbuffers"]
 std = ["md-tmpl-core/std"]
 serde = ["md-tmpl-core/serde"]
+flexbuffers = ["std", "serde", "md-tmpl-core/flexbuffers"]
 typed-builder = ["md-tmpl-core/typed-builder"]
 # Re-export proc macros so users can write `md_tmpl::include_template!`
 # instead of importing `md_tmpl_macros` separately.
@@ -53,7 +54,7 @@ required-features = ["std", "macros"]
 [[bench]]
 name = "template_bench"
 harness = false
-required-features = ["std"]
+required-features = ["std", "flexbuffers"]
 
 [lints]
 workspace = true
