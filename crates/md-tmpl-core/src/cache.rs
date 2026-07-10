@@ -637,6 +637,16 @@ Hello {{ name }}!",
         )
         .unwrap();
 
+        // Back-date the first version: both writes can land within one mtime tick
+        // on fast filesystems, and the mtime fast path would serve the stale entry.
+        let earlier = std::time::SystemTime::now() - std::time::Duration::from_secs(60);
+        std::fs::File::options()
+            .write(true)
+            .open(&path)
+            .unwrap()
+            .set_modified(earlier)
+            .unwrap();
+
         let cache = TemplateCache::new();
         let t1 = cache.load(&path).unwrap();
 
