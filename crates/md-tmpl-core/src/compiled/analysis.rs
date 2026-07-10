@@ -97,7 +97,13 @@ fn collect_refs_inner(
                 }
 
                 for (_, val_expr) in &inc.with_vars {
-                    if let Some(root) = extract_root_variable(val_expr.as_ref(), loop_bindings) {
+                    // Quoted with-values support {{ expr }} interpolation;
+                    // collect those references like body expressions.
+                    if let Some(inner) = crate::consts::strip_string_literal(val_expr.as_ref()) {
+                        extract_interpolation_refs(inner, vars, loop_bindings);
+                    } else if let Some(root) =
+                        extract_root_variable(val_expr.as_ref(), loop_bindings)
+                    {
                         vars.insert(root);
                     }
                 }

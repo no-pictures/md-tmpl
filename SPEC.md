@@ -1174,6 +1174,8 @@ This applies uniformly wherever a quoted string appears in a statement:
 Expressions inside interpolations follow the same rules as body expressions:
 dotted paths, function calls (`len()`, `kind()`, etc.), and filters
 (`| upper`, `| trim`, etc.) are all supported.
+They also count as parameter references for the compile-time
+unused/undeclared checks, exactly like body expressions.
 
 ### Examples
 

@@ -2154,3 +2154,41 @@ params = {}
 params: [source = str]
 ---
 From {{ source }}'''
+
+[[tests]]
+name = "include_with_interpolated_arg_containing_dots"
+description = "A {{ expr }} inside a quoted with-value counts as a parameter reference and interpolates at render"
+parent_template = '''
+---
+params: [dir = str]
+---
+> {% include [origin](./origin.tmpl.md) with source = "{{dir}}/about.tmpl.md" %}'''
+expected_output = "From web/about.tmpl.md"
+
+[tests.params]
+dir = "web"
+
+[tests.files]
+"origin.tmpl.md" = '''
+---
+params: [source = str]
+---
+From {{ source }}'''
+
+[[tests]]
+name = "include_with_interpolated_arg_undeclared_variable"
+description = "An undeclared variable inside an interpolated with-value is a compile error"
+parent_template = '''
+---
+params: []
+---
+> {% include [origin](./origin.tmpl.md) with source = "{{missing}}/about" %}'''
+expected_error = "missing"
+params = {}
+
+[tests.files]
+"origin.tmpl.md" = '''
+---
+params: [source = str]
+---
+From {{ source }}'''
